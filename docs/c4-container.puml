@@ -1,0 +1,52 @@
+@startuml
+left to right direction
+skinparam componentStyle rectangle
+skinparam shadowing false
+
+actor "Покупатель" as buyer
+actor "Продавец" as seller
+rectangle "Платёжный провайдер\n<<External System>>" as provider
+
+package "Маркетплейс <<System Boundary>>" {
+  rectangle "Веб-приложение\n<<Container>>" as web
+  rectangle "API Gateway\n<<Container>>" as gateway
+  rectangle "User Service\n<<Container>>" as users
+  rectangle "Catalog Service\n<<Container: Python>>" as catalog
+  rectangle "Feed Service\n<<Container>>" as feed
+  rectangle "Order Service\n<<Container>>" as orders
+  rectangle "Payment Service\n<<Container>>" as payments
+  rectangle "Notification Service\n<<Container>>" as notifications
+  queue "Message Broker\n<<Container>>" as broker
+
+  database "User DB\n<<Container>>" as userDb
+  database "Catalog DB\n<<Container>>" as catalogDb
+  database "Feed DB\n<<Container>>" as feedDb
+  database "Order DB\n<<Container>>" as orderDb
+  database "Payment DB\n<<Container>>" as paymentDb
+  database "Notification DB\n<<Container>>" as notificationDb
+}
+
+buyer --> web : Использует, HTTPS
+seller --> web : Управляет товарами, HTTPS
+web --> gateway : HTTP/JSON
+gateway --> users : HTTP/JSON
+gateway --> catalog : HTTP/JSON
+gateway --> feed : HTTP/JSON
+gateway --> orders : HTTP/JSON
+orders --> catalog : Проверяет товар, HTTP/JSON
+orders --> payments : Создаёт платёж, HTTP/JSON
+payments --> provider : Проводит платёж, HTTPS
+
+users --> userDb : Читает/пишет
+catalog --> catalogDb : Читает/пишет
+feed --> feedDb : Читает/пишет
+orders --> orderDb : Читает/пишет
+payments --> paymentDb : Читает/пишет
+notifications --> notificationDb : Читает/пишет
+
+catalog --> broker : ProductChanged
+orders --> broker : OrderStatusChanged
+payments --> broker : PaymentStatusChanged
+broker --> feed : События
+broker --> notifications : События
+@enduml
