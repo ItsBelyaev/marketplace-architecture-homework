@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: marketplace
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/marketplace}
+    username: ${DB_USER:marketplace}
+    password: ${DB_PASSWORD:marketplace}
+  flyway:
+    enabled: true
+  jackson:
+    default-property-inclusion: non_null
+
+app:
+  jwt-secret: ${JWT_SECRET:marketplace-homework-secret-change-in-production-2026}
+  access-token-minutes: 20
+  refresh-token-days: 14
+  order-limit-minutes: ${ORDER_LIMIT_MINUTES:1}
+
+springdoc:
+  swagger-ui:
+    url: /openapi/api.yaml
+
+logging:
+  pattern:
+    console: "%msg%n"

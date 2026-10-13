@@ -11,7 +11,7 @@ package "Маркетплейс <<System Boundary>>" {
   rectangle "Веб-приложение\n<<Container>>" as web
   rectangle "API Gateway\n<<Container>>" as gateway
   rectangle "User Service\n<<Container>>" as users
-  rectangle "Catalog Service\n<<Container: Python>>" as catalog
+  rectangle "Catalog Service\n<<Container: Java / Spring Boot>>" as catalog
   rectangle "Feed Service\n<<Container>>" as feed
   rectangle "Order Service\n<<Container>>" as orders
   rectangle "Payment Service\n<<Container>>" as payments
